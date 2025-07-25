@@ -19,11 +19,11 @@ export const ShotCard: React.FC<ShotCardProps> = ({ shot, shotNumber }) => {
     try {
       await navigator.clipboard.writeText(shot.prompt);
       setIsCopied(true);
-      showToast('Prompt copied to clipboard', 'success');
+      showToast('Prompt zkopírován do schránky', 'success');
       setTimeout(() => setIsCopied(false), 2000);
     } catch (error) {
       console.error('Failed to copy prompt:', error);
-      showToast('Failed to copy prompt', 'error');
+      showToast('Kopírování selhalo', 'error');
     }
   }, [shot.prompt, showToast]);
 
@@ -33,7 +33,7 @@ export const ShotCard: React.FC<ShotCardProps> = ({ shot, shotNumber }) => {
         <div className="flex items-center justify-center w-24 h-24 rounded-full bg-neutral-700/50 border-2 border-dashed border-neutral-600">
             <IconImage className="w-10 h-10 text-neutral-500" />
         </div>
-        <p className="mt-4 text-sm text-neutral-400">Visual Placeholder</p>
+        <p className="mt-4 text-sm text-neutral-400">Náhled obrázku</p>
         {shot.shotType && (
           <p className="mt-2 text-xs text-indigo-400 uppercase tracking-wide">{shot.shotType}</p>
         )}
@@ -54,7 +54,7 @@ export const ShotCard: React.FC<ShotCardProps> = ({ shot, shotNumber }) => {
               }`}
             >
               {isCopied ? <IconCheck className="w-4 h-4" /> : <IconClipboard className="w-4 h-4" />}
-              {isCopied ? 'Copied!' : 'Copy'}
+              {isCopied ? 'Zkopírováno!' : 'Kopírovat'}
             </button>
           </div>
           <p className="font-mono text-base text-neutral-200 leading-relaxed">
@@ -62,7 +62,7 @@ export const ShotCard: React.FC<ShotCardProps> = ({ shot, shotNumber }) => {
           </p>
           {shot.cameraMovement && (
             <div className="mt-3 pt-3 border-t border-neutral-700">
-              <span className="text-xs text-neutral-400 uppercase tracking-wide">Camera Movement: </span>
+              <span className="text-xs text-neutral-400 uppercase tracking-wide">Pohyb kamery: </span>
               <span className="text-xs text-purple-400">{shot.cameraMovement}</span>
             </div>
           )}

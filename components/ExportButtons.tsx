@@ -18,10 +18,10 @@ export const ExportButtons: React.FC<ExportButtonsProps> = ({ storyboard }) => {
         format,
         filename: `storyboard-${new Date().toISOString().split('T')[0]}`
       });
-      showToast(`Storyboard exported as ${format.toUpperCase()}`, 'success');
+      showToast(`Storyboard exportován jako ${format.toUpperCase()}`, 'success');
     } catch (error) {
       console.error('Export failed:', error);
-      showToast('Export failed. Please try again.', 'error');
+      showToast('Export selhal. Zkuste to znovu.', 'error');
     } finally {
       setIsExporting(false);
     }
@@ -34,10 +34,10 @@ export const ExportButtons: React.FC<ExportButtonsProps> = ({ storyboard }) => {
     
     try {
       await navigator.clipboard.writeText(allPrompts);
-      showToast('All prompts copied to clipboard', 'success');
+      showToast('Všechny prompty zkopírovány do schránky', 'success');
     } catch (error) {
       console.error('Failed to copy prompts:', error);
-      showToast('Failed to copy prompts. Please try again.', 'error');
+      showToast('Kopírování promptů selhalo. Zkuste to znovu.', 'error');
     }
   };
 
@@ -48,27 +48,27 @@ export const ExportButtons: React.FC<ExportButtonsProps> = ({ storyboard }) => {
         disabled={isExporting}
         className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50"
       >
-        Export JSON
+        Exportovat JSON
       </button>
       <button
         onClick={() => handleExport('txt')}
         disabled={isExporting}
         className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors disabled:opacity-50"
       >
-        Export Text
+        Exportovat text
       </button>
       <button
         onClick={() => handleExport('csv')}
         disabled={isExporting}
         className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors disabled:opacity-50"
       >
-        Export CSV
+        Exportovat CSV
       </button>
       <button
         onClick={copyAllPrompts}
         className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-md transition-colors"
       >
-        Copy All Prompts
+        Kopírovat všechny prompty
       </button>
     </div>
   );

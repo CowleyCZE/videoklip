@@ -15,9 +15,9 @@ export const StoryboardView: React.FC<StoryboardViewProps> = ({ storyboard }) =>
   return (
     <div className="w-full space-y-12">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-neutral-200 mb-2">Your Storyboard</h2>
+        <h2 className="text-2xl font-bold text-neutral-200 mb-2">Váš storyboard</h2>
         <p className="text-neutral-400">
-          {totalSegments} segments • {totalShots} shots
+          {totalSegments} segmentů • {totalShots} záběrů
         </p>
         <div className="mt-4">
           <ExportButtons storyboard={storyboard} />

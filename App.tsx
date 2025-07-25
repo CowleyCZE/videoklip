@@ -16,7 +16,7 @@ const App: React.FC = () => {
 
   const handleGenerateStoryboard = useCallback(async (lyrics: string, settings?: GenerationSettings) => {
     if (!lyrics.trim()) {
-      setError("Please enter some lyrics to begin.");
+      setError("Prosím zadejte text písně pro začátek.");
       return;
     }
     setIsLoading(true);
@@ -30,7 +30,7 @@ const App: React.FC = () => {
       setShowStoryboard(true);
     } catch (e) {
       console.error(e);
-      setError(e instanceof Error ? e.message : "An unknown error occurred. Please check the console and ensure your API key is configured correctly.");
+      setError(e instanceof Error ? e.message : "Došlo k neznámé chybě. Zkontrolujte konzoli a ujistěte se, že je váš API klíč správně nakonfigurován.");
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +55,7 @@ const App: React.FC = () => {
 
           {error && !isLoading && (
             <div className="text-center mt-10 bg-red-900/50 border border-red-700 p-6 rounded-lg">
-              <h2 className="text-2xl font-bold text-red-400 mb-2">Generation Failed</h2>
+              <h2 className="text-2xl font-bold text-red-400 mb-2">Generování selhalo</h2>
               <p className="text-red-300">{error}</p>
             </div>
           )}
@@ -67,7 +67,7 @@ const App: React.FC = () => {
           )}
         </main>
         <footer className="text-center p-4 text-neutral-500 text-sm">
-          <p>AI Director's Assistant | Powered by Gemini</p>
+          <p>AI Asistent režiséra | Poháněno Gemini</p>
         </footer>
       </div>
     </ToastProvider>

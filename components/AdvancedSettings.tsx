@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { GenerationSettings } from '../types';
 
 interface AdvancedSettingsProps {
@@ -30,7 +30,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
         onClick={onToggle}
         className="flex items-center justify-between w-full p-4 bg-neutral-800 rounded-lg border border-neutral-700 hover:bg-neutral-750 transition-colors"
       >
-        <span className="text-lg font-medium text-neutral-200">Advanced Settings</span>
+        <span className="text-lg font-medium text-neutral-200">Pokročilé nastavení</span>
         <span className={`transform transition-transform ${isVisible ? 'rotate-180' : ''}`}>
           ▼
         </span>
@@ -40,52 +40,52 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
         <div className="mt-4 p-6 bg-neutral-800/50 border border-neutral-700 rounded-lg space-y-6">
           <div>
             <label className="block text-sm font-medium text-neutral-300 mb-2">
-              Creativity Level
+              Úroveň kreativity
             </label>
             <select
               value={settings.creativityLevel}
               onChange={(e) => handleSettingChange('creativityLevel', e.target.value as GenerationSettings['creativityLevel'])}
               className="w-full p-3 bg-neutral-700 border border-neutral-600 rounded-md text-neutral-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             >
-              <option value="conservative">Conservative - Safe, traditional approaches</option>
-              <option value="balanced">Balanced - Mix of classic and modern</option>
-              <option value="creative">Creative - Bold, artistic choices</option>
-              <option value="experimental">Experimental - Cutting-edge, avant-garde</option>
+              <option value="conservative">Konzervativní - Bezpečné, tradiční přístupy</option>
+              <option value="balanced">Vyvážený - Mix klasického a moderního</option>
+              <option value="creative">Kreativní - Odvážné, umělecké volby</option>
+              <option value="experimental">Experimentální - Moderní, avantgardní</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-neutral-300 mb-2">
-              Video Style
+              Styl videa
             </label>
             <select
               value={settings.videoStyle}
               onChange={(e) => handleSettingChange('videoStyle', e.target.value as GenerationSettings['videoStyle'])}
               className="w-full p-3 bg-neutral-700 border border-neutral-600 rounded-md text-neutral-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             >
-              <option value="cinematic">Cinematic - Professional film quality</option>
-              <option value="documentary">Documentary - Realistic, authentic</option>
-              <option value="artistic">Artistic - Stylized, expressive</option>
-              <option value="commercial">Commercial - Polished, mainstream</option>
-              <option value="indie">Indie - Alternative, unconventional</option>
+              <option value="cinematic">Filmový - Profesionální kvalita filmu</option>
+              <option value="documentary">Dokumentární - Realistický, autentický</option>
+              <option value="artistic">Umělecký - Stylizovaný, expresivní</option>
+              <option value="commercial">Komerční - Uhlazeným mainstream</option>
+              <option value="indie">Nezávislý - Alternativní, nekonvenční</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-neutral-300 mb-2">
-              Color Palette
+              Barevná paleta
             </label>
             <select
               value={settings.colorPalette}
               onChange={(e) => handleSettingChange('colorPalette', e.target.value as GenerationSettings['colorPalette'])}
               className="w-full p-3 bg-neutral-700 border border-neutral-600 rounded-md text-neutral-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             >
-              <option value="vibrant">Vibrant - Bold, saturated colors</option>
-              <option value="muted">Muted - Soft, understated tones</option>
-              <option value="monochrome">Monochrome - Black and white</option>
-              <option value="warm">Warm - Reds, oranges, yellows</option>
-              <option value="cool">Cool - Blues, greens, purples</option>
-              <option value="natural">Natural - Earth tones, realistic</option>
+              <option value="vibrant">Zářivé - Výrazné, sytě barvy</option>
+              <option value="muted">Tlumené - Jemné, nenápadné tóny</option>
+              <option value="monochrome">Monochromní - Černobílé</option>
+              <option value="warm">Teplé - Červené, oranžové, žluté</option>
+              <option value="cool">Studené - Modré, zelené, fialové</option>
+              <option value="natural">Přírodní - Zemité tóny, realistické</option>
             </select>
           </div>
 
@@ -97,13 +97,13 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
                 onChange={(e) => handleSettingChange('includeTransitions', e.target.checked)}
                 className="w-4 h-4 text-indigo-600 bg-neutral-700 border-neutral-600 rounded focus:ring-indigo-500"
               />
-              <span className="ml-2 text-sm text-neutral-300">Include transition suggestions</span>
+              <span className="ml-2 text-sm text-neutral-300">Zahrnout návrhy přechodů</span>
             </label>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-neutral-300 mb-2">
-              Max Shots per Segment: {settings.maxShotsPerSegment}
+              Max záběrů na segment: {settings.maxShotsPerSegment}
             </label>
             <input
               type="range"
