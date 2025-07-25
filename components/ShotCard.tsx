@@ -4,6 +4,7 @@ import type { Shot } from '../types';
 import { IconClipboard } from './IconClipboard';
 import { IconCheck } from './IconCheck';
 import { IconImage } from './IconImage';
+import { useToast } from './Toast';
 
 interface ShotCardProps {
   shot: Shot;
@@ -12,13 +13,19 @@ interface ShotCardProps {
 
 export const ShotCard: React.FC<ShotCardProps> = ({ shot, shotNumber }) => {
   const [isCopied, setIsCopied] = useState(false);
+  const { showToast } = useToast();
 
-  const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(shot.prompt).then(() => {
+  const handleCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(shot.prompt);
       setIsCopied(true);
+      showToast('Prompt copied to clipboard', 'success');
       setTimeout(() => setIsCopied(false), 2000);
-    });
-  }, [shot.prompt]);
+    } catch (error) {
+      console.error('Failed to copy prompt:', error);
+      showToast('Failed to copy prompt', 'error');
+    }
+  }, [shot.prompt, showToast]);
 
   return (
     <div className="bg-neutral-800/50 border border-neutral-700 rounded-xl shadow-md overflow-hidden flex flex-col md:flex-row">
@@ -27,6 +34,9 @@ export const ShotCard: React.FC<ShotCardProps> = ({ shot, shotNumber }) => {
             <IconImage className="w-10 h-10 text-neutral-500" />
         </div>
         <p className="mt-4 text-sm text-neutral-400">Visual Placeholder</p>
+        {shot.shotType && (
+          <p className="mt-2 text-xs text-indigo-400 uppercase tracking-wide">{shot.shotType}</p>
+        )}
       </div>
       <div className="p-6 flex-grow">
         <p className="text-lg italic text-neutral-300 mb-4">"{shot.lyrics}"</p>
@@ -50,6 +60,12 @@ export const ShotCard: React.FC<ShotCardProps> = ({ shot, shotNumber }) => {
           <p className="font-mono text-base text-neutral-200 leading-relaxed">
             {shot.prompt}
           </p>
+          {shot.cameraMovement && (
+            <div className="mt-3 pt-3 border-t border-neutral-700">
+              <span className="text-xs text-neutral-400 uppercase tracking-wide">Camera Movement: </span>
+              <span className="text-xs text-purple-400">{shot.cameraMovement}</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

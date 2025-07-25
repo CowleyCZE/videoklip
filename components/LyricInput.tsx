@@ -1,17 +1,29 @@
 
 import React, { useState } from 'react';
+import { AdvancedSettings } from './AdvancedSettings';
+import type { GenerationSettings } from '../types';
 
 interface LyricInputProps {
-  onGenerate: (lyrics: string) => void;
+  onGenerate: (lyrics: string, settings?: GenerationSettings) => void;
   isLoading: boolean;
 }
 
+const defaultSettings: GenerationSettings = {
+  creativityLevel: 'balanced',
+  videoStyle: 'cinematic',
+  colorPalette: 'natural',
+  includeTransitions: false,
+  maxShotsPerSegment: 8
+};
+
 export const LyricInput: React.FC<LyricInputProps> = ({ onGenerate, isLoading }) => {
   const [lyrics, setLyrics] = useState('');
+  const [settings, setSettings] = useState<GenerationSettings>(defaultSettings);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onGenerate(lyrics);
+    onGenerate(lyrics, settings);
   };
 
   return (
@@ -20,6 +32,14 @@ export const LyricInput: React.FC<LyricInputProps> = ({ onGenerate, isLoading })
       <p className="text-lg text-neutral-400 mb-8">
         Paste your song lyrics below. Our AI will analyze the structure, emotion, and themes to create a cinematic storyboard for your music video.
       </p>
+      
+      <AdvancedSettings
+        settings={settings}
+        onSettingsChange={setSettings}
+        isVisible={showAdvanced}
+        onToggle={() => setShowAdvanced(!showAdvanced)}
+      />
+      
       <form onSubmit={handleSubmit} className="w-full">
         <textarea
           value={lyrics}

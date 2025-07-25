@@ -1,12 +1,12 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import type { StoryboardSegment } from '../types';
+import type { StoryboardSegment, GenerationSettings } from '../types';
 
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
+if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY environment variable not set");
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const storyboardSchema = {
   type: Type.ARRAY,
@@ -41,9 +41,22 @@ const storyboardSchema = {
 };
 
 
-export const createStoryboard = async (lyrics: string): Promise<StoryboardSegment[]> => {
+export const createStoryboard = async (lyrics: string, settings?: GenerationSettings): Promise<StoryboardSegment[]> => {
   const systemInstruction = `You are an expert AI Director's Assistant specializing in music video creation. Your task is to transform song lyrics into a structured, cinematic storyboard. You must analyze the lyrics for structure, emotion, themes, and visual elements, and then translate these into detailed, actionable prompts for a text-to-image/video generator.`;
   
+  // Build enhanced prompt based on settings
+  let styleGuidance = '';
+  if (settings) {
+    styleGuidance = `
+    **Style Guidelines:**
+    - Creativity Level: ${settings.creativityLevel} - ${getCreativityDescription(settings.creativityLevel)}
+    - Video Style: ${settings.videoStyle} - ${getVideoStyleDescription(settings.videoStyle)}
+    - Color Palette: ${settings.colorPalette} - ${getColorPaletteDescription(settings.colorPalette)}
+    - Maximum shots per segment: ${settings.maxShotsPerSegment}
+    ${settings.includeTransitions ? '- Include transition suggestions between shots' : ''}
+    `;
+  }
+
   const prompt = `
     Analyze the following song lyrics and generate a complete visual storyboard.
 
@@ -61,6 +74,8 @@ export const createStoryboard = async (lyrics: string): Promise<StoryboardSegmen
         *   **Style/Aesthetic:** The overall visual style (e.g., photorealistic, 4K, watercolor style, vintage film grain, Wes Anderson aesthetic).
     5.  **Vary the Chorus:** For recurring sections like the Chorus, you MUST create visually distinct prompts for each instance to avoid repetition. The core theme should remain, but the camera angle, shot composition, or specific action should change significantly.
     6.  **Output Format:** Your entire response must be ONLY the JSON object conforming to the provided schema. Do not include any introductory text, explanations, or markdown formatting like \`\`\`json.
+
+    ${styleGuidance}
 
     **Lyrics to Analyze:**
     ---
@@ -94,5 +109,39 @@ export const createStoryboard = async (lyrics: string): Promise<StoryboardSegmen
       throw new Error("The generation was blocked due to safety settings. Please modify the lyrics and try again.");
     }
     throw new Error("Failed to generate storyboard from Gemini API. Check console for details.");
+  }
+};
+
+// Helper functions for style descriptions
+const getCreativityDescription = (level: GenerationSettings['creativityLevel']): string => {
+  switch (level) {
+    case 'conservative': return 'Use traditional, proven cinematographic techniques';
+    case 'balanced': return 'Mix classic and modern visual approaches';
+    case 'creative': return 'Employ bold, artistic visual choices';
+    case 'experimental': return 'Push boundaries with avant-garde techniques';
+    default: return '';
+  }
+};
+
+const getVideoStyleDescription = (style: GenerationSettings['videoStyle']): string => {
+  switch (style) {
+    case 'cinematic': return 'Professional film quality with dramatic lighting and composition';
+    case 'documentary': return 'Realistic, authentic visual approach';
+    case 'artistic': return 'Stylized, expressive visual language';
+    case 'commercial': return 'Polished, mainstream appeal';
+    case 'indie': return 'Alternative, unconventional aesthetic';
+    default: return '';
+  }
+};
+
+const getColorPaletteDescription = (palette: GenerationSettings['colorPalette']): string => {
+  switch (palette) {
+    case 'vibrant': return 'Use bold, saturated colors';
+    case 'muted': return 'Employ soft, understated tones';
+    case 'monochrome': return 'Black and white or single color schemes';
+    case 'warm': return 'Focus on reds, oranges, and yellows';
+    case 'cool': return 'Emphasize blues, greens, and purples';
+    case 'natural': return 'Use realistic, earth-tone colors';
+    default: return '';
   }
 };

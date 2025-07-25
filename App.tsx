@@ -4,8 +4,9 @@ import { LyricInput } from './components/LyricInput';
 import { StoryboardView } from './components/StoryboardView';
 import { Loader } from './components/Loader';
 import { Header } from './components/Header';
+import { ToastProvider } from './components/Toast';
 import { createStoryboard } from './services/geminiService';
-import type { StoryboardSegment } from './types';
+import type { StoryboardSegment, GenerationSettings } from './types';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -13,7 +14,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showStoryboard, setShowStoryboard] = useState<boolean>(false);
 
-  const handleGenerateStoryboard = useCallback(async (lyrics: string) => {
+  const handleGenerateStoryboard = useCallback(async (lyrics: string, settings?: GenerationSettings) => {
     if (!lyrics.trim()) {
       setError("Please enter some lyrics to begin.");
       return;
@@ -24,7 +25,7 @@ const App: React.FC = () => {
     setShowStoryboard(false);
 
     try {
-      const result = await createStoryboard(lyrics);
+      const result = await createStoryboard(lyrics, settings);
       setStoryboard(result);
       setShowStoryboard(true);
     } catch (e) {
@@ -42,32 +43,34 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-100 font-sans flex flex-col">
-      <Header onReset={handleReset} showReset={showStoryboard || isLoading} />
-      <main className="flex-grow container mx-auto p-4 md:p-8 flex flex-col items-center">
-        {!showStoryboard && !isLoading && (
-           <LyricInput onGenerate={handleGenerateStoryboard} isLoading={isLoading} />
-        )}
-        
-        {isLoading && <Loader />}
+    <ToastProvider>
+      <div className="min-h-screen bg-neutral-900 text-neutral-100 font-sans flex flex-col">
+        <Header onReset={handleReset} showReset={showStoryboard || isLoading} />
+        <main className="flex-grow container mx-auto p-4 md:p-8 flex flex-col items-center">
+          {!showStoryboard && !isLoading && (
+             <LyricInput onGenerate={handleGenerateStoryboard} isLoading={isLoading} />
+          )}
+          
+          {isLoading && <Loader />}
 
-        {error && !isLoading && (
-          <div className="text-center mt-10 bg-red-900/50 border border-red-700 p-6 rounded-lg">
-            <h2 className="text-2xl font-bold text-red-400 mb-2">Generation Failed</h2>
-            <p className="text-red-300">{error}</p>
-          </div>
-        )}
+          {error && !isLoading && (
+            <div className="text-center mt-10 bg-red-900/50 border border-red-700 p-6 rounded-lg">
+              <h2 className="text-2xl font-bold text-red-400 mb-2">Generation Failed</h2>
+              <p className="text-red-300">{error}</p>
+            </div>
+          )}
 
-        {showStoryboard && storyboard && (
-          <div className="w-full max-w-5xl animate-fade-in">
-            <StoryboardView storyboard={storyboard} />
-          </div>
-        )}
-      </main>
-      <footer className="text-center p-4 text-neutral-500 text-sm">
-        <p>AI Director's Assistant | Powered by Gemini</p>
-      </footer>
-    </div>
+          {showStoryboard && storyboard && (
+            <div className="w-full max-w-5xl animate-fade-in">
+              <StoryboardView storyboard={storyboard} />
+            </div>
+          )}
+        </main>
+        <footer className="text-center p-4 text-neutral-500 text-sm">
+          <p>AI Director's Assistant | Powered by Gemini</p>
+        </footer>
+      </div>
+    </ToastProvider>
   );
 };
 
