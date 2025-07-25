@@ -1,0 +1,6 @@
+{
+  "name": "AI Director's Assistant: Lyric to Storyboard",
+  "description": "An innovative application that functions as an intelligent 'director's assistant' for music video creation. It transforms song lyrics into a structured visual storyboard, generating detailed cinematic prompts for use in external AI video generation platforms.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
